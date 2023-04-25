@@ -1,0 +1,90 @@
+.apply-form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  background-color: #f5f5f5;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+.title {
+  margin-bottom: 30px;
+  font-size: 36px;
+  font-weight: bold;
+  color: #333;
+}
+
+.input-container {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: transparent;
+  color: #333;
+  font-size: 18px;
+  font-weight: bold;
+  border: 2px solid #ccc;
+  transition: border-color 0.2s ease-in-out;
+}
+
+input:focus,
+textarea:focus {
+  outline: none
+}
+
+button[type="submit"] {
+margin-top: 30px;
+padding: 10px 20px;
+border: none;
+border-radius: 5px;
+background-color: #2ecc71;
+color: #fff;
+font-size: 18px;
+font-weight: bold;
+text-transform: uppercase;
+cursor: pointer;
+transition: background-color 0.2s ease-in-out;
+}
+
+button[type="submit"]:hover {
+background-color: #27ae60;
+}
+
+.error-message {
+margin-top: 20px;
+color: #c0392b;
+font-size: 18px;
+font-weight: bold;
+}
+
+@media (max-width: 600px) {
+.apply-form-container {
+width: 90%;
+}
+}
+
+@media (max-width: 400px) {
+.title {
+font-size: 28px;
+}
+
+input,
+textarea {
+font-size: 16px;
+}
+
+button[type="submit"] {
+font-size: 16px;
+}
+
+.error-message {
+font-size: 16px;
+}
+}

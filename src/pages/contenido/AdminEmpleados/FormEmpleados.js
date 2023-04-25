@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Axios from "../../../services/Axios";
-
-import { useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 export function FormEmpleados() {
-  const variables = {
+  const initialState = {
     curp: "",
     nombre: "",
     apellidos: "",
@@ -13,48 +12,45 @@ export function FormEmpleados() {
     trabajo: "",
     telefono: "",
     email: "",
-    password: ""
-  }
-
-  const [empleados, setEmpleados] = useState(variables);
-  //Variable para obtener los datos del parámetro especificado en admin
+    password: "",
+  };
+  const [empleados, setEmpleados] = useState(initialState);
+  const [loading, setLoading] = useState(false); // Indicador de carga
   const params = useParams();
 
-  const onChange = (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setEmpleados({ ...empleados, [name]: value });
   };
 
-  const guardarDatos = (e) => {
-    const formulario = document.getElementById("personales");
-    const formData = new FormData(formulario);
-
-    Axios.post("/empleado", empleados).then(() => {
-      console.log("Registros guardados exitosamente");
-    });
-    console.log(formData);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true); // Iniciar indicador de carga
+    try {
+      // Si params.id está definido, es una actualización. Si no, es un nuevo registro.
+      if (params.id) {
+        await Axios.patch(`/empleado/${params.id}`, empleados);
+        console.log("Datos actualizados correctamente");
+      } else {
+        await Axios.post("/empleado", empleados);
+        console.log("Registros guardados exitosamente");
+        setEmpleados(initialState); // Restablecer estado a valores iniciales
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false); // Detener indicador de carga
+    }
   };
 
   const obtenerEmpleados = async (id) => {
-    const empleado = await Axios.get("/empleado/" + id);
-    setEmpleados(empleado.data);
-    console.log(empleado);
-  };
-
-  const updateEmpleado=async()=>{
-    await Axios.patch(`/empleado/${params.id}`, empleados).then(
-      ()=>{
-        console.log("Datos actualizados correctamente")
-      }
-    )
-  }
-
-  const Enviar = (e) => {
-    e.preventDefault();
-
-  guardarDatos();
-
-    
+    try {
+      const empleado = await Axios.get(`/empleado/${id}`);
+      setEmpleados(empleado.data);
+      console.log(empleado);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -62,181 +58,152 @@ export function FormEmpleados() {
   }, [params.id]);
 
   return (
-    <div className="container-fluid p-3">
-      <div class="card">
-        <div class="card-header">Datos personales</div>
-        <div class="card-body">
-          <form class="row g-3 p-2" onSubmit={Enviar} id="personales">
-            <div class="mb-3 row">
-              <label for="curp" class="col-sm-2 col-form-label">
+    <>
+      <div className="card">
+        <div className="card-header">Datos personales</div>
+        <div className="card-body">
+          <form className="row g-3 p-2" onSubmit={handleSubmit}>
+            <div className="mb-3 col-sm-6">
+              <label htmlFor="curp" className="form-label">
                 Curp
               </label>
-              <div class="col-sm-10">
-                <input
-                  name="curp"
-                  type="text"
-                  class="form-control"
-                  id="curp"
-                  placeholder="Ingrese su curp"
-                  value={empleados.curp}
-                  onChange={onChange}
-                />
-              </div>
+              <input
+                name="curp"
+                type="text"
+                className="form-control"
+                id="curp"
+                placeholder="Ingrese su curp"
+                value={empleados.curp}
+                onChange={handleChange}
+              />
             </div>
-            <div class="mb-3 row">
-              <label for="nombre" class="col-sm-2 col-form-label">
+            <div className="mb-3 col-sm-6">
+              <label htmlFor="nombre" className="form-label">
                 Nombre
               </label>
-              <div class="col-sm-10">
-                <input
-                  type="text"
-                  class="form-control"
-                  name="nombre"
-                  id="nombre"
-                  placeholder="Ingrese su nombre"
-                  value={empleados.nombre}
-                  onChange={onChange}
-                />
-              </div>
+              <input
+                type="text"
+                className="form-control"
+                name="nombre"
+                id="nombre"
+                placeholder="Ingrese su nombre"
+                value={empleados.nombre}
+                onChange={handleChange}
+              />
             </div>
-            <div class="mb-3 row">
-              <label for="apellidos" class="col-sm-2 col-form-label">
+            <div className="mb-3 col-sm-6">
+              <label htmlFor="apellidos" className="form-label">
                 Apellidos
               </label>
-              <div class="col-sm-10">
-                <input
-                  type="text"
-                  class="form-control"
-                  name="apellidos"
-                  id="apellidos"
-                  placeholder="Ingresa los apellidos"
-                  value={empleados.apellidos}
-                  onChange={onChange}
-                />
-              </div>
+              <input
+                type="text"
+                className="form-control"
+                name="apellidos"
+                id="apellidos"
+                placeholder="Ingrese sus apellidos"
+                value={empleados.apellidos}
+                  onChange={handleChange}
+              />
             </div>
-            <div class="mb-3 row">
-              <label for="fechana" class="col-sm-2 col-form-label">
-                Fecha de Nacimiento
+            <div className="mb-3 col-sm-6">
+              <label htmlFor="fechana" className="form-label">
+                Fecha de nacimiento
               </label>
-              <div class="col-sm-10">
-                <input
-                  type="text"
-                  class="form-control"
-                  name="fechana"
-                  id="fechana"
-                  placeholder="Ingrese su Fecha de Nacimiento"
-                  value={empleados.fechana}
-                  onChange={onChange}
-                />
-              </div>
+              <input
+                type="date"
+                className="form-control"
+                name="fechana"
+                id="fechana"
+                placeholder="Ingrese su fecha de nacimiento"
+                value={empleados.fechana}
+                onChange={handleChange}
+              />
             </div>
-            <div class="mb-3 row">
-              <label for="sexo" class="col-sm-2 col-form-label">
+            <div className="mb-3 col-sm-6">
+              <label htmlFor="sexo" className="form-label">
                 Sexo
               </label>
-              <div class="col-sm-10">
-                <input
-                  type="text"
-                  class="form-control"
-                  name="sexo"
-                  id="sexo"
-                  placeholder="Ingresa sexo"
-                  value={empleados.sexo}
-                  onChange={onChange}
-                />
-              </div>
+              <select
+                className="form-select"
+                name="sexo"
+                id="sexo"
+                value={empleados.sexo}
+                onChange={handleChange}
+              >
+                <option value="">Seleccione una opción</option>
+                <option value="Hombre">Hombre</option>
+                <option value="Mujer">Mujer</option>
+                <option value="Otro">Otro</option>
+              </select>
             </div>
-            <div class="mb-3 row">
-              <label for="trabajo" class="col-sm-2 col-form-label">
+            <div className="mb-3 col-sm-6">
+              <label htmlFor="trabajo" className="form-label">
                 Trabajo
               </label>
-              <div class="col-sm-10">
-                <input
+              <input
                   type="text"
-                  class="form-control"
+                  className="form-control"
                   name="trabajo"
                   id="trabajo"
-                  placeholder="Ingrese su Trabajo"
+                  placeholder="Ingrese su trabajo"
                   value={empleados.trabajo}
-                  onChange={onChange}
-                />
-              </div>
+                  onChange={handleChange}
+              />
             </div>
-            <div class="mb-3 row">
-              <label for="telefono" class="col-sm-2 col-form-label">
+            <div className="mb-3 col-sm-6">
+              <label htmlFor="telefono" className="form-label">
                 Teléfono
               </label>
-              <div class="col-sm-10">
-                <input
+              <input
                   type="text"
-                  class="form-control"
+                  className="form-control"
                   name="telefono"
                   id="telefono"
-                  placeholder="Ingresa tu numero de telefono"
+                  placeholder="Ingrese su teléfono"
                   value={empleados.telefono}
-                  onChange={onChange}
-                />
-              </div>
+                  onChange={handleChange}
+              />
             </div>
-            <div class="mb-3 row">
-              <label for="email" class="col-sm-2 col-form-label">
-                Correo Electronico
+            <div className="mb-3 col-sm-6">
+              <label htmlFor="email" className="form-label">
+                Email
               </label>
-              <div class="col-sm-10">
-                <input
-                  type="text"
-                  class="form-control"
+              <input
+                  type="email"
+                  className="form-control"
                   name="email"
                   id="email"
-                  placeholder="Ingrese su Correo Electronico"
+                  placeholder="Ingrese su email"
                   value={empleados.email}
-                  onChange={onChange}
-                />
-              </div>
+                  onChange={handleChange}
+              />
             </div>
-            <div class="mb-3 row">
-              <label for="password" class="col-sm-2 col-form-label">
+            <div className="mb-3 col-sm-6">
+              <label htmlFor="password" className="form-label">
                 Contraseña
               </label>
-              <div class="col-sm-10">
-                <input
+              <input
                   type="password"
-                  class="form-control"
+                  className="form-control"
                   name="password"
                   id="password"
-                  placeholder="Ingrese su Contraseña"
+                  placeholder="Ingrese su contraseña"
                   value={empleados.password}
-                  onChange={onChange}
-                />
-              </div>
+                  onChange={handleChange}
+              />
             </div>
-            <div class="mb-3 row">
-              <label for="password" class="col-sm-2 col-form-label">
-                Contraseña
-              </label>
-              <div class="col-sm-10">
-                <input
-                  type="password"
-                  class="form-control"
-                  name="repeatpassword"
-                  id="password"
-                  placeholder="Ingrese su Contraseña"
-                  value={empleados.password}
-                  onChange={onChange}
-                />
-              </div>
-            </div>
-            
-
-            <div class="col-12">
-              <button class="btn btn-primary" type="submit">
-                {empleados.curp==="" ? "Guardar":"Actualizar"}
+            <div className="d-grid gap-2 col-sm-6 mx-auto">
+              <button
+              className="btn btn-primary"
+              type="submit"
+              disabled={loading}
+              >
+              {params.id ? "Actualizar" : "Guardar"}
               </button>
             </div>
           </form>
         </div>
       </div>
-    </div>
+    </>
   );
 }

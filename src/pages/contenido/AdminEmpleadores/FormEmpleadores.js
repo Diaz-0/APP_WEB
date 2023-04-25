@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Axios from "../../../services/Axios";
-
-import { useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 export function FormEmpleadores() {
-  const variables = {
+  const [empleadores, setEmpleadores] = useState({
     curp: "",
     nombre: "",
     apellidos: "",
@@ -12,213 +11,200 @@ export function FormEmpleadores() {
     sexo: "",
     telefono: "",
     email: "",
-    password: ""
-  }
+    password: "",
+  });
 
-  const [empleadores, setEmpleadores] = useState(variables);
-  //Variable para obtener los datos del parámetro especificado en admin
   const params = useParams();
-
-  const onChange = (e) => {
-    const { name, value } = e.target;
-    setEmpleadores({ ...empleadores, [name]: value });
-  };
-
-  const guardarDatos = (e) => {
-    const formulario = document.getElementById("personales");
-    const formData = new FormData(formulario);
-
-    Axios.post("/empleador", empleadores).then(() => {
-      console.log("Registros guardados exitosamente");
-    });
-    console.log(formData);
-  };
-
-  const obtenerEmpleador = async (id) => {
-    const empleador = await Axios.get("/empleador/" + id);
-    setEmpleadores(empleador.data);
-    console.log(empleador);
-  };
-
-  const updateEmpleador=async()=>{
-    await Axios.patch(`/empleador/${params.id}`, empleadores).then(
-      ()=>{
-        console.log("Datos actualizados correctamente")
-      }
-    )
-  }
-
-  const Enviar = (e) => {
-    e.preventDefault();
-
-  guardarDatos();
-  };
-  
 
   useEffect(() => {
     obtenerEmpleador(params.id);
   }, [params.id]);
 
+  const obtenerEmpleador = async (id) => {
+    const empleador = await Axios.get(`/empleador/${id}`);
+    setEmpleadores(empleador.data);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEmpleadores((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+
+    try {
+      if (params.id) {
+        await Axios.patch(`/empleador/${params.id}`, empleadores);
+        console.log("Datos actualizados correctamente");
+      } else {
+        await Axios.post("/empleador", empleadores);
+        console.log("Registros guardados exitosamente");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    console.log(formData);
+  };
+
   return (
     <div className="container-fluid p-3">
-      <div class="card">
-        <div class="card-header">Datos personales</div>
-        <div class="card-body">
-          <form class="row g-3 p-2" onSubmit={Enviar} id="personales">
-            <div class="mb-3 row">
-              <label for="curp" class="col-sm-2 col-form-label">
+      <div className="card">
+        <div className="card-header">Datos personales</div>
+        <div className="card-body">
+          <form className="row g-3 p-2" onSubmit={handleSubmit}>
+            <div className="mb-3 row">
+              <label htmlFor="curp" className="col-sm-2 col-form-label">
                 Curp
               </label>
-              <div class="col-sm-10">
+              <div className="col-sm-10">
                 <input
                   name="curp"
                   type="text"
-                  class="form-control"
+                  className="form-control"
                   id="curp"
                   placeholder="Ingrese su curp"
                   value={empleadores.curp}
-                  onChange={onChange}
+                  onChange={handleChange}
+                  required
                 />
               </div>
             </div>
-            <div class="mb-3 row">
-              <label for="nombre" class="col-sm-2 col-form-label">
+            <div className="mb-3 row">
+              <label htmlFor="nombre" className="col-sm-2 col-form-label">
                 Nombre
               </label>
-              <div class="col-sm-10">
+              <div className="col-sm-10">
                 <input
                   type="text"
-                  class="form-control"
+                  className="form-control"
                   name="nombre"
                   id="nombre"
                   placeholder="Ingrese su nombre"
                   value={empleadores.nombre}
-                  onChange={onChange}
+                  onChange={handleChange}
+                  required
                 />
               </div>
             </div>
-            <div class="mb-3 row">
-              <label for="apellidos" class="col-sm-2 col-form-label">
+            <div className="mb-3 row">
+              <label htmlFor="apellidos" className="col-sm-2 col-form-label">
                 Apellidos
               </label>
-              <div class="col-sm-10">
+              <div className="col-sm-10">
                 <input
                   type="text"
-                  class="form-control"
+                  className="form-control"
                   name="apellidos"
                   id="apellidos"
                   placeholder="Ingresa los apellidos"
                   value={empleadores.apellidos}
-                  onChange={onChange}
+                  onChange={handleChange}
+                  required
                 />
               </div>
             </div>
-            <div class="mb-3 row">
-              <label for="fechana" class="col-sm-2 col-form-label">
+            <div className="mb-3 row">
+              <label htmlFor="fechana" className="col-sm-2 col-form-label">
                 Fecha de Nacimiento
               </label>
-              <div class="col-sm-10">
+              <div className="col-sm-10">
                 <input
-                  type="text"
-                  class="form-control"
+                  type="date"
+                  className="form-control"
                   name="fechana"
                   id="fechana"
-                  placeholder="Ingrese su Fecha de Nacimiento"
+                  placeholder="Ingrese su fecha de nacimiento"
                   value={empleadores.fechana}
-                  onChange={onChange}
+                  onChange={handleChange}
+                  required
                 />
               </div>
             </div>
-            <div class="mb-3 row">
-              <label for="sexo" class="col-sm-2 col-form-label">
+            <div className="mb-3 row">
+              <label htmlFor="sexo" className="col-sm-2 col-form-label">
                 Sexo
               </label>
-              <div class="col-sm-10">
-                <input
-                  type="text"
-                  class="form-control"
+              <div className="col-sm-10">
+                <select
                   name="sexo"
                   id="sexo"
-                  placeholder="Ingresa sexo"
+                  className="form-control"
                   value={empleadores.sexo}
-                  onChange={onChange}
-                />
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">-- Seleccione --</option>
+                  <option value="Masculino">Masculino</option>
+                  <option value="Femenino">Femenino</option>
+                  <option value="Otro">Otro</option>
+                </select>
               </div>
             </div>
-            <div class="mb-3 row">
-              <label for="telefono" class="col-sm-2 col-form-label">
+            <div className="mb-3 row">
+              <label htmlFor="telefono" className="col-sm-2 col-form-label">
                 Teléfono
               </label>
-              <div class="col-sm-10">
+              <div className="col-sm-10">
                 <input
                   type="text"
-                  class="form-control"
+                  className="form-control"
                   name="telefono"
                   id="telefono"
-                  placeholder="Ingresa tu numero de telefono"
+                  placeholder="Ingrese su teléfono"
                   value={empleadores.telefono}
-                  onChange={onChange}
+                  onChange={handleChange}
+                  required
                 />
               </div>
             </div>
-            <div class="mb-3 row">
-              <label for="email" class="col-sm-2 col-form-label">
-                Correo Electronico
+            <div className="mb-3 row">
+              <label htmlFor="email" className="col-sm-2 col-form-label">
+                Email
               </label>
-              <div class="col-sm-10">
+              <div className="col-sm-10">
                 <input
-                  type="text"
-                  class="form-control"
+                  type="email"
+                  className="form-control"
                   name="email"
                   id="email"
-                  placeholder="Ingrese su Correo Electronico"
+                  placeholder="Ingrese su correo electrónico"
                   value={empleadores.email}
-                  onChange={onChange}
+                  onChange={handleChange}
+                  required
                 />
               </div>
             </div>
-            <div class="mb-3 row">
-              <label for="password" class="col-sm-2 col-form-label">
+            <div className="mb-3 row">
+              <label htmlFor="password" className="col-sm-2 col-form-label">
                 Contraseña
               </label>
-              <div class="col-sm-10">
+              <div className="col-sm-10">
                 <input
                   type="password"
-                  class="form-control"
+                  className="form-control"
                   name="password"
                   id="password"
-                  placeholder="Ingrese su Contraseña"
+                  placeholder="Ingrese su contraseña"
                   value={empleadores.password}
-                  onChange={onChange}
+                  onChange={handleChange}
+                  required
                 />
               </div>
             </div>
-            <div class="mb-3 row">
-              <label for="password" class="col-sm-2 col-form-label">
-                Contraseña
-              </label>
-              <div class="col-sm-10">
-                <input
-                  type="password"
-                  class="form-control"
-                  name="repeatpassword"
-                  id="password"
-                  placeholder="Ingrese su Contraseña"
-                  value={empleadores.password}
-                  onChange={onChange}
-                />
-              </div>
-            </div>
-            
-
-            <div class="col-12">
-              <button class="btn btn-primary" type="submit">
-                {empleadores.curp==="" ? "Guardar":"Actualizar"}
+            <div className="col-sm-12 text-center">
+              <button type="submit" className="btn btn-primary">
+                Guardar
               </button>
             </div>
           </form>
         </div>
       </div>
     </div>
-  );
-}
+);
+}    

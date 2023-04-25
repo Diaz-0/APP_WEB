@@ -1,0 +1,150 @@
+.job-list2-container {
+    background-color: #121212;
+    color: white;
+    font-size: 1.2rem;
+    padding: 2rem;
+  }
+  
+  .title2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .job-list2-table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  .job-list2-table th,
+  .job-list2-table td {
+    border: 1px solid #333333;
+    padding: 1rem;
+    text-align: left;
+
+}
+
+.job-list2-item {
+transition: background-color 0.3s ease-in-out;
+}
+
+.job-list2-item:hover {
+background-color: #262626;
+}
+
+.view-applications-button {
+background-color: #0077FF;
+border: none;
+border-radius: 0.25rem;
+color: white;
+cursor: pointer;
+font-size: 1rem;
+padding: 0.5rem 1rem;
+transition: background-color 0.3s ease-in-out;
+}
+
+.view-applications-button:hover {
+background-color: #0059B3;
+}
+
+.applications-table {
+border-collapse: collapse;
+width: 100%;
+}
+
+.applications-table th,
+.applications-table td {
+border: 1px solid #333333;
+padding: 1rem;
+text-align: left;
+}
+
+.application-item {
+transition: background-color 0.3s ease-in-out;
+}
+
+.application-item:hover {
+background-color: #262626;
+}
+
+/* Futuristic styles */
+.job-list-container {
+background-color: #0C0C0C;
+color: #FFF;
+font-size: 1.2rem;
+padding: 2rem;
+border: 2px solid #00FFFF;
+}
+
+.title2 {
+font-size: 2rem;
+margin-bottom: 2rem;
+text-align: center;
+text-transform: uppercase;
+}
+
+.job-list2-table {
+border-collapse: collapse;
+width: 100%;
+}
+
+.job-list2-table th,
+.job-list2-table td {
+border: none;
+padding: 1rem;
+text-align: left;
+font-size: 1.2rem;
+}
+
+.job-list2-table th {
+background-color: #00FFFF;
+color: #0C0C0C;
+}
+
+.job-list2-item {
+transition: background-color 0.3s ease-in-out;
+}
+
+.job-list2-item:hover {
+background-color: #262626;
+}
+
+.view-applications-button {
+background-color: #00FFFF;
+border: none;
+border-radius: 0.25rem;
+color: #0C0C0C;
+cursor: pointer;
+font-size: 1rem;
+padding: 0.5rem 1rem;
+transition: background-color 0.3s ease-in-out;
+}
+
+.view-applications-button:hover {
+background-color: #008B8B;
+}
+
+.applications-table {
+border-collapse: collapse;
+width: 100%;
+}
+
+.applications-table th,
+.applications-table td {
+border: none;
+padding: 1rem;
+text-align: left;
+font-size: 1.2rem;
+}
+
+.applications-table th {
+background-color: #00FFFF;
+color: #0C0C0C;
+}
+
+.application-item {
+transition: background-color 0.3s ease-in-out;
+}
+
+.application-item:hover {
+background-color: #262626;
+}
