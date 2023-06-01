@@ -1,0 +1,38 @@
+/* EmployeeNotifications.css */
+
+.employee-notifications-container {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  }
+  
+  .employee-notifications-container h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: #333333;
+  }
+  
+  .notifications-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .notification-item {
+    background-color: #f7f7f7;
+    border-radius: 0.25rem;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  }
+  
+  .notification-item strong {
+    font-weight: bold;
+  }
+  
+  .notification-item span {
+    display: block;
+    margin-top: 0.5rem;
+    color: #666666;
+  }
+  

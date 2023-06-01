@@ -1,17 +1,11 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Select, message } from 'antd';
-import Axios from "../../../services/Axios";
+import { UserOutlined, LockOutlined, PhoneOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
+import Axios from '../../../services/Axios';
+import './Signin.css';
 
 const { Option } = Select;
-
-const layout = {
-  labelCol: { span: 8 },
-  wrapperCol: { span: 16 },
-};
-
-const tailLayout = {
-  wrapperCol: { offset: 8, span: 16 },
-};
 
 export function Signin() {
   const [errorMessage, setErrorMessage] = useState('');
@@ -35,9 +29,11 @@ export function Signin() {
   return (
     <div className="register-form">
       <h1>Registro de usuario</h1>
-      {errorMessage && <p>{errorMessage}</p>}
+      {errorMessage && (
+        <p className="error-message">{errorMessage}</p>
+      )}
       <Form
-        {...layout}
+        layout="vertical"
         name="basic"
         initialValues={{ role: '' }}
         onFinish={onFinish}
@@ -46,9 +42,12 @@ export function Signin() {
         <Form.Item
           label="Correo electrónico"
           name="email"
-          rules={[{ required: true, message: 'Por favor ingrese su correo electrónico!' }]}
+          rules={[
+            { required: true, message: 'Por favor ingrese su correo electrónico!' },
+            { type: 'email', message: 'Por favor ingrese un correo electrónico válido!' },
+          ]}
         >
-          <Input />
+          <Input prefix={<UserOutlined />} placeholder="Correo electrónico" />
         </Form.Item>
 
         <Form.Item
@@ -56,7 +55,7 @@ export function Signin() {
           name="password"
           rules={[{ required: true, message: 'Por favor ingrese su contraseña!' }]}
         >
-          <Input.Password />
+          <Input.Password prefix={<LockOutlined />} placeholder="Contraseña" />
         </Form.Item>
 
         <Form.Item
@@ -64,8 +63,7 @@ export function Signin() {
           name="role"
           rules={[{ required: true, message: 'Por favor seleccione un rol!' }]}
         >
-          <Select>
-            <Option value="">-- Seleccione un rol --</Option>
+          <Select placeholder="-- Seleccione un rol --">
             <Option value="employee">Empleado</Option>
             <Option value="employer">Empleador</Option>
           </Select>
@@ -74,9 +72,12 @@ export function Signin() {
         <Form.Item
           label="CURP"
           name="curp"
-          rules={[{ required: true, message: 'Por favor ingrese su CURP!' }]}
+          rules={[
+            { required: true, message: 'Por favor ingrese su CURP!' },
+            { pattern: /^[A-Z]{4}\d{6}[HM][A-Z]{5}\w\d$/, message: 'Por favor ingrese un CURP válido!' },
+          ]}
         >
-          <Input />
+          <Input placeholder="CURP" />
         </Form.Item>
 
         <Form.Item
@@ -84,7 +85,7 @@ export function Signin() {
           name="name"
           rules={[{ required: true, message: 'Por favor ingrese su nombre!' }]}
         >
-          <Input />
+          <Input placeholder="Nombre" />
         </Form.Item>
 
         <Form.Item
@@ -92,15 +93,14 @@ export function Signin() {
           name="lastName"
           rules={[{ required: true, message: 'Por favor ingrese su apellido!' }]}
         >
-          <Input />
+          <Input placeholder="Apellido" />
         </Form.Item>
 
         <Form.Item
           label="Fecha de nacimiento"
           name="birthDate"
-          rules={[{ required: true, message: 'Por favor ingrese su fecha de nacimiento!' }]}
-        >
-          <Input type="date" />
+          rules={[{ required: true, message: 'Por favor ingrese su fecha de nacimiento!' }]}        >
+          <Input type="date" placeholder="Fecha de nacimiento" />
         </Form.Item>
 
         <Form.Item
@@ -108,7 +108,7 @@ export function Signin() {
           name="address"
           rules={[{ required: true, message: 'Por favor ingrese su dirección!' }]}
         >
-          <Input />
+          <Input placeholder="Dirección" />
         </Form.Item>
 
         <Form.Item
@@ -116,15 +116,31 @@ export function Signin() {
           name="gender"
           rules={[{ required: true, message: 'Por favor seleccione su género!' }]}
         >
-          <Select>
-<Option value="">-- Seleccione su género --</Option>
-<Option value="M">Masculino</Option>
-<Option value="F">Femenino</Option>
-<Option value="O">Otro</Option>
-</Select>
-</Form.Item>    <Form.Item {...tailLayout}>
-          <Button type="primary" htmlType="submit">
-            Registrarse
+          <Select placeholder="-- Seleccione su género --">
+            <Option value="">-- Seleccione su género --</Option>
+            <Option value="M">Masculino</Option>
+            <Option value="F">Femenino</Option>
+            <Option value="O">Otro</Option>
+          </Select>
+        </Form.Item>
+
+        <Form.Item
+          label="Teléfono"
+          name="phone"
+          rules={[{ required: true, message: 'Por favor ingrese su teléfono!' }]}
+        >
+          <Input prefix={<PhoneOutlined />} placeholder="Teléfono" />
+        </Form.Item>
+
+        <Form.Item>
+          <Button type="primary" htmlType="submit" className="register-button">
+            Registrar
+          </Button>
+        </Form.Item>
+
+        <Form.Item>
+        <Button type="primary" htmlType="submit" className="register-button">
+          <Link to="/Iniciar-Sesión">Elijo iniciar sesión</Link>
           </Button>
         </Form.Item>
       </Form>

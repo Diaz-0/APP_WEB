@@ -1,4 +1,4 @@
-.apply-form-container {
+.apply-form2-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -8,7 +8,7 @@
   border-radius: 10px;
 }
 
-.title {
+.title4 {
   margin-bottom: 30px;
   font-size: 36px;
   font-weight: bold;
@@ -65,13 +65,13 @@ font-weight: bold;
 }
 
 @media (max-width: 600px) {
-.apply-form-container {
+.apply-form2-container {
 width: 90%;
 }
 }
 
 @media (max-width: 400px) {
-.title {
+.title4 {
 font-size: 28px;
 }
 

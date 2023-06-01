@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Axios from "../../../services/Axios";
-import '../Css/JobPosting.css';
+import './JobPosting.css';
 
 export function JobPosting () {
   const [title, setTitle] = useState("");
@@ -8,18 +8,40 @@ export function JobPosting () {
   const [salary, setSalary] = useState("");
   const [location, setLocation] = useState("");
   const [requirements, setRequirements] = useState("");
+  const [user, setUser] = useState(null); // Nuevo estado para almacenar el usuario actual
+
+  useEffect(() => {
+    // Buscar el usuario actual al cargar el componente
+    const fetchUser = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (token) {
+          const response = await Axios.get("/profile", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          setUser(response.data);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchUser();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await Axios.post("/jobs", {
+      const response = await Axios.post("/jobs", {
         title,
         description,
         salary,
         location,
         requirements,
+        employer: user._id // Usar el ID del usuario actual como employer
       });
-      // Actualizar el estado del trabajo aquí
+      // Actualizar el estado del trabajo con la respuesta del servidor
+      const newJob = response.data;
+      // Realizar cualquier acción adicional después de publicar el trabajo
       // Resetear los valores del formulario
       setTitle("");
       setDescription("");
@@ -87,4 +109,4 @@ export function JobPosting () {
       </form>
     </div>
   );
-};
+}

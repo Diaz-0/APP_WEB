@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Axios from "../../../services/Axios";
-import "../Css/JobList.css";
-import { ApplyForm } from "./ApplyForm";
+import "./JobList.css";
+import { ApplyForm } from "../Apply-Nott/ApplyForm";
 
 export function JobList({ token }) {
   const [jobs, setJobs] = useState([]);
@@ -21,13 +21,26 @@ export function JobList({ token }) {
     fetchJobs();
   }, [token]);
 
+  const handleApply = (job) => {
+    setSelectedJob(job);
+    if (!job.isAccepted) {
+      // Realizar la solicitud de aplicar al trabajo solo si no ha sido aceptado
+      // Lógica para enviar la solicitud de aplicación
+    }
+  };
+
   return (
     <div className="job-list-container">
-      <h1 className="title">Trabajos disponibles</h1>
+      <h1 className="title2">Trabajos disponibles</h1>
+      <div className="notice-container">
+        <p className="notice-text">
+          Estimado Usuario, se le avisa que solamente podrá aplicar a dos trabajos.
+        </p>
+      </div>
       <table className="job-list-table">
         <thead>
           <tr>
-            <th>Titulo</th>
+            <th>Título</th>
             <th>Descripción</th>
             <th>Salario</th>
             <th>Domicilio</th>
@@ -44,7 +57,11 @@ export function JobList({ token }) {
               <td>{job.location}</td>
               <td>{job.requirements}</td>
               <td>
-                <button onClick={() => setSelectedJob(job)} className="apply-button">
+                <button
+                  onClick={() => handleApply(job)}
+                  className="apply-button"
+                  disabled={job.isAccepted} // Deshabilitar el botón si el trabajo ha sido aceptado
+                >
                   Aplicar
                 </button>
               </td>
